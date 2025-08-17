@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
       
       // Caso 1: Login tradicional (email + senha)
       if (typeof credentialsOrToken === 'object') {
-        const response = await axios.post("http://localhost:5000/api/auth/login", credentialsOrToken);
+        const response = await api.loginManager(credentialsOrToken);
         token = response.data.token;
         user = response.data.user;
       } 
@@ -44,8 +44,6 @@ export const AuthProvider = ({ children }) => {
         token = credentialsOrToken;
         user = userData;
       }
-
-      // Garante que avatarUrl está presente no objeto user
       const userWithAvatar = {
         ...user,
         avatarUrl: user.avatarUrl || null
@@ -66,7 +64,7 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  // Nova função para reset de senha
+  // Função para reset de senha
   const resetPassword = async (email) => {
     try {
       const response = await api.post("/auth/reset-password", { email });
@@ -77,7 +75,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Função para atualizar senha (quando o usuário recebe o token por email)
+  // Função para atualizar senha
   const updatePassword = async (token, newPassword) => {
     try {
       const response = await api.post("/auth/update-password", {
@@ -94,14 +92,13 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Função para atualizar dados do usuário (incluindo avatar)
+  // Função para atualizar dados do usuário
   const updateUser = async (updatedUserData) => {
     try {
       const currentUser = JSON.parse(localStorage.getItem("user"));
       const mergedUser = { 
         ...currentUser, 
         ...updatedUserData,
-        // Mantém o avatarUrl existente se não for fornecido um novo
         avatarUrl: updatedUserData.avatarUrl || currentUser.avatarUrl 
       };
       
@@ -148,7 +145,7 @@ export const AuthProvider = ({ children }) => {
 export const useAuth = () => {
   const context = useContext(AuthContext)
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider')
+    throw new Error('useAuth deve ser usado dentro de um AuthProvider');
   }
   return context
 }

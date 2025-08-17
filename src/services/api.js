@@ -1,8 +1,11 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
-  timeout: 10000,
+  baseURL: import.meta.env.VITE_API_URL || import.meta.env.API_DOMAIN,
+  timeout: 300000,
+    headers: {
+    "Content-Type": "application/json",
+  },
 });
 
 api.interceptors.request.use(
@@ -31,40 +34,43 @@ api.interceptors.response.use(
   }
 );
 
-// Manager
-export const registerManager = () => api.post('/auth/register');
-export const loginManager = () => api.post('/auth/login');
-export const dashboardManager = () => api.get('/dashboard/manager');
+const ApiService = {
 
-// Tenants
-// export const getTenants = () => api.get('/inquilinos');
-export const getTenantById = (id) => api.get(`/tenants/${id}`);
-export const createTenant = (data) => api.post('/tenants', data);
-export const updateTenant = (id, data) => api.put(`/tenants/${id}`, data);
-export const deleteTenant = (id) => api.delete(`/tenants/${id}`);
+  // Manager
+  registerManager: () => api.post('/auth/register'),
+  loginManager: (data) => api.post('/auth/login', (data)),
+  dashboardManager: () => api.get('/dashboard/manager'),
 
-// Property
-export const getPropertyById = (id) => api.get(`/properties/${id}`);
-export const createProperty = (data) => api.post('/properties', data);
-export const updateProperty = (id, data) => api.put(`/properties/${id}`, data);
-export const deleteProperty = (id) => api.delete(`/properties/${id}`);
+  // Tenants
+  getTenantById: (id) => api.get(`/tenants/${id}`),
+  createTenant: (data) => api.post('/tenants', data),
+  updateTenant: (id, data) => api.put(`/tenants/${id}`, data),
+  deleteTenant: (id) => api.delete(`/tenants/${id}`),
 
-// Payments
-export const createPayment = (data) => api.post('/payments', data);
-export const updatePayment = (id, data) => api.put(`/payments/${id}`, data);
-export const getPaymentById = (id) => api.get(`/payments/${id}`);
+  // Property
+  getPropertyById: (id) => api.get(`/properties/${id}`),
+  createProperty: (data) => api.post('/properties', data),
+  updateProperty: (id, data) => api.put(`/properties/${id}`, data),
+  deleteProperty: (id) => api.delete(`/properties/${id}`),
 
-// History
-export const getPaymentHistory =  (data) => api.get('/payment-history');
-export const getPaymentHistoryById = (id) => api.get(`/payment-history/tenant/${id}`);
+  // Payments
+  createPayment: (data) => api.post('/payments', data),
+  updatePayment: (id, data) => api.put(`/payments/${id}`, data),
+  getPaymentById: (id) => api.get(`/payments/${id}`),
 
-// Fines
-export const getFineSettings =  (data) => api.get('/fine-settings');
-export const updateFineSettings =  (data) => api.put('/fine-settings');
+  // History
+  getPaymentHistory:  (data) => api.get('/payment-history', (data)),
+  getPaymentHistoryById: (id) => api.get(`/payment-history/tenant/${id}`),
 
-// Notifications
-export const createNotification = (data) => api.post('/notifications', data);
-export const getNotification = (data) => api.get('/notifications', data);
-export const getNotificationById = (id) => api.get(`/notifications/tenant/${id}`);
+  // Fines
+  getFineSettings:  () => api.get('/fine-settings'),
+  updateFineSettings:  (data) => api.put('/fine-settings', (data)),
 
-export default api;
+  // Notifications
+  createNotification: (data) => api.post('/notifications', data),
+  getNotification: (data) => api.get('/notifications', data),
+  getNotificationById: (id) => api.get(`/notifications/tenant/${id}`)
+
+}
+
+export default ApiService;
