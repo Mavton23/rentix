@@ -61,7 +61,7 @@ export default function App() {
   const isAdmin = user?.role === "admin";
 
   return (
-    <Router>
+    <Router basename="/">
       <div className="flex min-h-screen w-full">
         {/* Sidebar - visível apenas quando autenticado */}
 

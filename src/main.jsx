@@ -10,7 +10,6 @@ import "./index.css";
 import './styles/fonts.css';
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  // <React.StrictMode> ← Remove esta linha
   <>
     <ThemeProvider>
       <AuthProvider>
@@ -21,7 +20,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         </TooltipProvider>
       </AuthProvider>
     </ThemeProvider>
-    {/* </React.StrictMode> ← E esta */}
     <Toaster richColors />
   </>
 );
